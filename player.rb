@@ -22,6 +22,10 @@ class Player
     DEFAULT_BET
   end
 
+  def version
+    "Ergh"
+  end
+
   def showdown(game_state)
 
   end
@@ -57,8 +61,6 @@ class Player
   def same_rank?
     my_cards.map { |card| card.rank }.uniq.size == 1
   end
-
-
 
   def our_position
     game_state[:in_action]
