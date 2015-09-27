@@ -128,7 +128,7 @@ class Player
   end
 
   def ask_rainman
-    return nil unless all_cards.size < 5
+    return nil if all_cards.size < 5
     uri = URI.parse("http://rainman.leanpoker.org/rank")
     JSON.parse(::Net::HTTP.post_form(uri, 'cards' => all_cards_json).body)
   end

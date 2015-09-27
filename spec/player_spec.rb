@@ -24,7 +24,6 @@ describe Player do
       expect(@player.cards_on_deck).to be_kind_of Array
     end
     it "calls rainman api", focus: true do
-      @player.ask_rainman
       expect(@player.get_cards_rank).to_not raise_error
     end
   end
