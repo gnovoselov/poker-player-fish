@@ -1,7 +1,15 @@
 require_relative 'card'
+require 'pry'
+require 'byebug'
+require 'active_support/all'
+require 'cgi'
 require 'json'
+require 'httparty'
 
 class Player
+  include HTTParty
+  base_uri = "http://rainman.leanpoker.org"
+
 
   attr_reader :me, :game_state
 
@@ -12,9 +20,10 @@ class Player
   GOOD_SUITS = [['T', '9'], ['J', 'T'], ['Q', 'J'], ['Q', 'T'], ['8', '9']]
 
   def bet_request(game_state)
-    puts game_state.to_s
+    #puts game_state.to_s
     @game_state = game_state
     @me = me
+    get_cards_rank
     return double_max_bet if is_top_comb?
     return double_max_bet if i_have_pair?
     return double_max_bet if has_ace?
@@ -103,17 +112,14 @@ class Player
     size
   end
 
-  def my_cards_json_arr
-    me['hole_cards'] + @game_state['community_cards']
-  end
-
-  def test_card_api
-
+  def all_cards_json
+    (@me['hole_cards'] + @game_state['community_cards']).to_json
   end
 
   def get_cards_rank
-    my_cards_json_arr.to_json
+    return nil unless all_cards.size < 5
+    uri = URI.parse("http://rainman.leanpoker.org/rank")
+    @rainman_says = JSON.parse(Net::HTTP.post_form(uri, 'cards' => all_cards_json ).body)
   end
-  
 
 end
