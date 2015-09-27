@@ -43,7 +43,7 @@ class Player
   end
 
   def me
-    game_state["players"].find { |p| p['name'] == 'Fish' }
+    @game_state["players"].find { |p| p['name'] == 'Fish' }
   end
 
   def my_cards
