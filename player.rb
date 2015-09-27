@@ -24,7 +24,26 @@ class Player
   end
 
   def showdown(game_state)
+  end
 
+  def flop?
+    cards_on_deck.size == 3
+  end
+
+  def turn?
+    cards_on_deck.size == 4
+  end
+
+  def river
+    cards_on_deck.size == 5
+  end
+
+  def cards_on_deck
+    @game_state["community_cards"].map { |c| Card.new(c["rank"], c["suit"]) }
+  end
+
+  def all_cards
+    cards_on_deck + my_cards
   end
 
   def max_bet_plus_double_blind
