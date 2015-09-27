@@ -7,4 +7,7 @@ describe Card do
   it "compares by rank" do
     expect(Card.new('K', 'hearts').same_rank? Card.new('K','spades')).to be_true
   end
+  it "int rank returns int rank" do
+    expect(Card.new('J', 'hearts').int_rank).to eq(11)
+  end
 end
