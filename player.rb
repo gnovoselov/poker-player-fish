@@ -10,6 +10,7 @@ class Player
     return 1000500 if is_top_comb?
     1000
   rescue StandardError => e
+    puts '!!!!!!!!!!!!!!!!!!!!!!!!!!'
     puts e
     150
   end
