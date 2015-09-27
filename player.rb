@@ -1,4 +1,6 @@
 require_relative 'card'
+require 'json'
+
 class Player
 
   attr_reader :me, :game_state
@@ -8,6 +10,7 @@ class Player
   VERSION = 'Fish 0.1'
   TOP_COMBS = [['A', 'K'], ['A', 'Q'], ['A', 'J'], ['A', 'T'], ['K', 'Q'], ['K', 'J'], ['K', 'T'], ['Q', 'J']]
   GOOD_SUITS = [['T', '9'], ['J', 'T'], ['Q', 'J'], ['Q', 'T'], ['8', '9']]
+  STEAL_BET = 100
 
   def bet_request(game_state)
     puts game_state.to_s
@@ -16,6 +19,7 @@ class Player
     return double_max_bet if is_top_comb?
     return double_max_bet if i_have_pair?
     return double_max_bet if has_ace?
+    return STEAL_BET if need_steal?
     suggested_bet
   rescue StandardError => e
     puts '!!!!!!!!!!!!!!!!!!!!!!!!!!'
@@ -99,6 +103,27 @@ class Player
     end
 
     size
+  end
+
+  def my_cards_json_arr
+    me['hole_cards'] + @game_state['community_cards']
+  end
+
+  def test_card_api
+
+  end
+
+  def get_cards_rank
+    my_cards_json_arr.to_json
+  end
+
+
+  def need_steal?
+    active_players_count == 0
+    my_id = @me['id']
+    steal = [my_id, my_id + 1].include? @game_state['dealer'] && active_players_count == 0
+    puts "STEALING BLIND #{steal}" if steal
+    steal
   end
 
 end
