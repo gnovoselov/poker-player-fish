@@ -15,15 +15,11 @@ class Player
     @me = me
     return ALL_IN_BET if is_top_comb?
     return ALL_IN_BET if i_have_pair?
-    ALL_IN_BET
+    DEFAULT_BET
   rescue StandardError => e
     puts '!!!!!!!!!!!!!!!!!!!!!!!!!!'
     puts e
     ALL_IN_BET
-  end
-
-  def version
-    "Ergh"
   end
 
   def showdown(game_state)
