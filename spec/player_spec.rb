@@ -14,7 +14,6 @@ describe Player do
       @player = Player.new
       @player.bet_request(game_state)
     end
-
     it "i have pair" do
       expect(@player.i_have_pair?).to eq false
     end
@@ -25,9 +24,13 @@ describe Player do
       expect(@player.cards_on_deck).to be_kind_of Array
     end
     it "calls rainman api", focus: true do
-      puts @player.get_cards_rank
       expect(@player.get_cards_rank).to_not raise_error
-      puts @player.get_cards_rank
+    end
+    it "pre-flop bets" do
+      expect(@player.pre_flop_bets).to_not raise_error
+    end
+    it "post-flop bets" do
+      expect(@player.post_flop_bets).to_not raise_error
     end
   end
 

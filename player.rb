@@ -1,27 +1,25 @@
 require_relative 'card'
-require 'pry'
-require 'active_support/all'
-require 'cgi'
 require 'json'
+require 'net/http'
 
 class Player
   attr_reader :me, :game_state
 
   ALL_IN_BET = 1000500
   DEFAULT_BET = 50
+  DEFAULT_POST_FLOP_BET = 40
   VERSION = 'Fish 0.1'
-  TOP_COMBS = [['A', 'K'], ['A', 'Q'], ['A', 'J'], ['A', 'T'], ['K', 'Q'], ['K', 'J'], ['K', 'T'], ['Q', 'J']]
+  TOP_COMBS = [['A', 'K'], ['A', 'Q'], ['A', 'J'], ['A', 'T'], ['K', 'Q']]
   GOOD_SUITS = [['T', '9'], ['J', 'T'], ['Q', 'J'], ['Q', 'T'], ['8', '9']]
   STEAL_BET = 100
 
   def bet_request(game_state)
-    #puts game_state.to_s
     @game_state = game_state
     @me = me
     if pre_flop?
       pre_flop_bets
     else
-      @rainman_says = get_cards_rank
+      @rainman_says = ask_rainman
       puts @rainman_says
       post_flop_bets
     end
@@ -94,6 +92,10 @@ class Player
     cards.map { |card| card.rank }.uniq.size == 1
   end
 
+  def same_suit?
+    my_cards.map { |card| card.suite }.uniq.size == 1
+  end
+
   def our_position
     @game_state[:in_action]
   end
@@ -122,9 +124,15 @@ class Player
   end
 
   def get_cards_rank
-    return nil unless all_cards.size < 5
+    if @rainman_says
+      @rainman_says.fetch "rank"
+    end
+  end
+
+  def ask_rainman
+    return nil if all_cards.size < 5
     uri = URI.parse("http://rainman.leanpoker.org/rank")
-    JSON.parse(Net::HTTP.post_form(uri, 'cards' => all_cards_json).body)
+    JSON.parse(::Net::HTTP.post_form(uri, 'cards' => all_cards_json).body)
   end
 
   def need_steal?
@@ -152,7 +160,7 @@ class Player
     0
   end
 
-  def post_flop_bets
+  def post_flop_bets_advanced
     cards_used = my_cards
     if @rainman_says
       # puts 'rainman'
@@ -187,6 +195,34 @@ class Player
     return suggested_bet if i_have_pair?(cards_used)
     return suggested_bet if has_ace?(cards_used)
     0
+    rank = get_cards_rank
+    puts "POST FLOP RANK #{rank}"
+  end
+
+  def post_flop_bets
+    if rank >= 2
+      suggested_bet
+    elsif rank == 1
+      post_flop_bets_advanced
+    elsif flush_dro? || straight_dro?
+      PUTS "FLUSH DRO"
+      suggested_bet
+    elsif i_have_pair?
+      suggested_bet
+    else
+      DEFAULT_POST_FLOP_BET
+    end
+  end
+
+  def flush_dro?
+    suits = my_cards.map(&:suite)
+    suits.map do |suit|
+      cards_on_deck.select{ |card| suits.include? card.suite }.size
+    end.any? { |s| s >= same_suit? ? 2 : 3 }
+  end
+
+  def straight_dro?
+    false
   end
 
 end
