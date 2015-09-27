@@ -1,15 +1,17 @@
 require_relative 'card'
 class Player
 
+  ALL_IN_BET = 1000
+  DEFAULT_BET = 200
   VERSION = "Default Ruby folding player"
   TOP_COMBS = [['A', 'K'], ['A', 'Q'], ['A', 'J'], ['A', 'T'], ['K', 'Q'], ['K', 'J'], ['Q', 'J']]
 
   def bet_request(game_state)
     puts game_state.to_s
     @me = me(game_state)
-    return 1000500 if is_top_comb?
-    return 1000500 if i_have_pair?
-    1000
+    return ALL_IN_BET if is_top_comb?
+    return ALL_IN_BET if i_have_pair?
+    DEFAULT_BET
   rescue StandardError => e
     puts '!!!!!!!!!!!!!!!!!!!!!!!!!!'
     puts e
