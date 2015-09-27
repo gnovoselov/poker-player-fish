@@ -159,7 +159,11 @@ class Player
 
   def pre_flop_bets
     return suggested_bet if is_top_comb?
-    return suggested_bet if i_have_pair?
+    if i_have_pair?
+      return suggested_bet if my_cards.first.try(:int_rank).to_i >= 10
+    else
+      return 150
+    end 
     return suggested_bet if has_ace?
     return STEAL_BET if need_steal?
     0
