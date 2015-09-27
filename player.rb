@@ -1,4 +1,6 @@
 require_relative 'card'
+require 'json'
+
 class Player
 
   attr_reader :me, :game_state
@@ -100,5 +102,18 @@ class Player
 
     size
   end
+
+  def my_cards_json_arr
+    me['hole_cards'] + @game_state['community_cards']
+  end
+
+  def test_card_api
+
+  end
+
+  def get_cards_rank
+    my_cards_json_arr.to_json
+  end
+  
 
 end
