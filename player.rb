@@ -172,7 +172,7 @@ class Player
     elsif flush_dro? || straight_dro?
       PUTS "FLUSH DRO"
       suggested_bet
-    elsif has_ace? || i_have_pair?
+    elsif i_have_pair?
       suggested_bet
     else
       DEFAULT_POST_FLOP_BET
