@@ -44,7 +44,7 @@ class Player
   end
 
   def my_cards
-    @me["hole_cards"].map { |i| Card.new(i["rank"], i["suit"]) }
+    me["hole_cards"].map { |i| Card.new(i["rank"], i["suit"]) }
   end
 
   def i_have_pair?
@@ -60,7 +60,7 @@ class Player
   end
 
   def our_position
-    @game_state[:in_action]
+    game_state[:in_action]
   end
 
 end
