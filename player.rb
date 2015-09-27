@@ -195,11 +195,11 @@ class Player
     return suggested_bet if i_have_pair?(cards_used)
     return suggested_bet if has_ace?(cards_used)
     0
-    rank = get_cards_rank
-    puts "POST FLOP RANK #{rank}"
   end
 
   def post_flop_bets
+    rank = get_cards_rank
+    puts "POST FLOP RANK #{rank}"
     if rank >= 2
       suggested_bet
     elsif rank == 1
