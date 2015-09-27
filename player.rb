@@ -16,8 +16,11 @@ class Player
     puts game_state.to_s
     @game_state = game_state
     @me = me
-    return pre_flop_bets if pre_flop?
-    return post_flop_bets if post_flop?
+    if pre_flop?
+      pre_flop_bets
+    else
+      post_flop_bets
+    end
   rescue StandardError => e
     puts '!!!!!!!!!!!!!!!!!!!!!!!!!!'
     puts e
