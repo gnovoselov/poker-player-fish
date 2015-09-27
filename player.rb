@@ -38,8 +38,16 @@ class Player
     cards_on_deck.size == 4
   end
 
-  def river
+  def river?
     cards_on_deck.size == 5
+  end
+
+  def post_flop?
+    flop? || turn? || river?
+  end
+
+  def pre_flop?
+    cards_on_deck.size == 0
   end
 
   def cards_on_deck
@@ -119,6 +127,8 @@ class Player
 
 
   def need_steal?
+    return false unless preflop?
+    
     active_players_count == 0
     my_id = @me['id']
     steal = [my_id, my_id + 1].include? @game_state['dealer'] && active_players_count == 0
