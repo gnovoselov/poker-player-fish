@@ -1,7 +1,4 @@
 require_relative 'card'
-require 'pry'
-require 'active_support/all'
-require 'cgi'
 require 'json'
 require 'net/http'
 
