@@ -15,6 +15,7 @@ class Player
     @me = me
     return ALL_IN_BET if is_top_comb?
     return ALL_IN_BET if i_have_pair?
+    return ALL_IN_BET if has_ace?
     DEFAULT_BET
   rescue StandardError => e
     puts '!!!!!!!!!!!!!!!!!!!!!!!!!!'
@@ -60,6 +61,10 @@ class Player
 
   def our_position
     @game_state[:in_action]
+  end
+
+  def has_ace?
+    my_cards.any?{ |card| card.rank == 'A' }
   end
 
 end
