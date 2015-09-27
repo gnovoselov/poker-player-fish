@@ -3,6 +3,7 @@ require 'pry'
 require 'active_support/all'
 require 'cgi'
 require 'json'
+require 'net/http'
 
 class Player
   attr_reader :me, :game_state
