@@ -21,7 +21,7 @@ class Player
   private
 
   def me(game_state)
-    game_state["players"].find { |p| p.name == 'Fish' }
+    game_state["players"].find { |p| p['name'] == 'Fish' }
   end
 
   def my_cards
@@ -34,6 +34,10 @@ class Player
 
   def is_top_comb?
     TOP_COMBS.map(&:sort).include? my_cards.map{ |card| card['rank'] }.sort
+  end
+
+  def our_position(game_state)
+    game_state[:in_action]
   end
 
 end
