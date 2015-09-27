@@ -127,8 +127,8 @@ class Player
 
 
   def need_steal?
-    return false unless preflop?
-    
+    return false unless pre_flop?
+
     active_players_count == 0
     my_id = @me['id']
     steal = [my_id, my_id + 1].include? @game_state['dealer'] && active_players_count == 0
