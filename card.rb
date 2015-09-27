@@ -10,7 +10,7 @@ class Card
   end
 
   def == (card)
-    card.rank == @rank && card.suite = @suite
+    card.rank == @rank
   end
 
 end
