@@ -46,8 +46,8 @@ class Player
     cards_on_deck + my_cards
   end
 
-  def suggested_bet
-    DEFAULT_BET
+  def suggested_bet(blinds = 3)
+    max_bet + @game_state["small_blind"] * blinds - max_bet % @game_state["small_blind"]
   end
 
   def double_max_bet
