@@ -4,7 +4,7 @@ class Player
   ALL_IN_BET = 1000
   DEFAULT_BET = 200
   VERSION = "Default Ruby folding player"
-  TOP_COMBS = [['A', 'K'], ['A', 'Q'], ['A', 'J'], ['A', 'T'], ['K', 'Q'], ['K', 'J'], ['Q', 'J']]
+  TOP_COMBS = [['A', 'K'], ['A', 'Q'], ['A', 'J'], ['A', 'T'], ['K', 'Q'], ['K', 'J'], ['K', 'T'], ['Q', 'J']]
 
   def bet_request(game_state)
     puts game_state.to_s
@@ -38,6 +38,10 @@ class Player
 
   def is_top_comb?
     TOP_COMBS.map(&:sort).include? my_cards.map{ |card| card.rank }.sort
+  end
+
+  def same_rank?
+    my_cards.map { |card| card.suit }.uniq.size == 1
   end
 
   def our_position(game_state)
