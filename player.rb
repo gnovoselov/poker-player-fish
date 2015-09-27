@@ -37,8 +37,6 @@ class Player
 
   end
 
-  private
-
   def me
     game_state["players"].find { |p| p['name'] == 'Fish' }
   end
