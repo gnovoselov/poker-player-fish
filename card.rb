@@ -5,6 +5,10 @@ class Card
     @suite = suite
   end
 
+  def same_rank?(card)
+    card.rank == @rank
+  end
+
   def == (card)
     card.rank == @rank && card.suite = @suite
   end
