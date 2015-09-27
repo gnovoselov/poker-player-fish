@@ -180,9 +180,9 @@ class Player
   end
 
   def flush_dro?
-    suits = my_cards.map(&:suit)
+    suits = my_cards.map(&:suite)
     suits.map do |suit|
-      cards_on_deck.select{ |card| suits.include? card.suit }.size
+      cards_on_deck.select{ |card| suits.include? card.suite }.size
     end.any? { |s| s >= same_suit? ? 2 : 3 }
   end
 
