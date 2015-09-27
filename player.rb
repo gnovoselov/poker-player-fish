@@ -5,7 +5,7 @@ class Player
 
   ALL_IN_BET = 1000500
   DEFAULT_BET = 200
-  VERSION = "Default Ruby folding player"
+  VERSION = 'Fish 0.1'
   TOP_COMBS = [['A', 'K'], ['A', 'Q'], ['A', 'J'], ['A', 'T'], ['K', 'Q'], ['K', 'J'], ['K', 'T'], ['Q', 'J']]
   GOOD_SUITS = [['T', '9'], ['J', 'T'], ['Q', 'J'], ['Q', 'T'], ['8', '9']]
 
