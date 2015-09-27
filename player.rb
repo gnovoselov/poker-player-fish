@@ -6,7 +6,7 @@ class Player
   def bet_request(game_state)
     puts game_state.to_s
     @me = me(game_state)
-    150
+    1000
   rescue StandardError => e
     puts e
     150
