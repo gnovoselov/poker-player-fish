@@ -11,6 +11,7 @@ class Player
     return 1000500 if i_have_pair?
     1000
   rescue StandardError => e
+    puts '!!!!!!!!!!!!!!!!!!!!!!!!!!'
     puts e
     150
   end
