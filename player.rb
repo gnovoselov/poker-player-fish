@@ -96,7 +96,7 @@ class Player
   end
 
   def same_suit?
-    my_cards.map { |card| card.suit }.uniq.size == 1
+    my_cards.map { |card| card.suite }.uniq.size == 1
   end
 
   def our_position
