@@ -16,11 +16,8 @@ class Player
     puts game_state.to_s
     @game_state = game_state
     @me = me
-    return suggested_bet if is_top_comb?
-    return suggested_bet if i_have_pair?
-    return suggested_bet if has_ace?
-    return STEAL_BET if need_steal?
-    DEFAULT_BET
+    return pre_flop_bets if pre_flop?
+    return post_flop_bets if post_flop?
   rescue StandardError => e
     puts '!!!!!!!!!!!!!!!!!!!!!!!!!!'
     puts e
@@ -141,6 +138,22 @@ class Player
     end
 
     steal
+  end
+
+  def pre_flop_bets
+    return suggested_bet if is_top_comb?
+    return suggested_bet if i_have_pair?
+    return suggested_bet if has_ace?
+    return STEAL_BET if need_steal?
+    DEFAULT_BET
+  end
+
+  def post_flop_bets
+    return suggested_bet if is_top_comb?
+    return suggested_bet if i_have_pair?
+    return suggested_bet if has_ace?
+    return STEAL_BET if need_steal?
+    DEFAULT_BET
   end
 
 end
