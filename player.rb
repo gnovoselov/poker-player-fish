@@ -8,6 +8,7 @@ class Player
     puts game_state.to_s
     @me = me(game_state)
     return 1000500 if is_top_comb?
+    return 1000500 if i_have_pair?
     1000
   rescue StandardError => e
     puts e
