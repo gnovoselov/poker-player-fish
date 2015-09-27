@@ -26,6 +26,12 @@ describe Player do
     it "calls rainman api", focus: true do
       expect(@player.get_cards_rank).to_not raise_error
     end
+    it "pre-flop bets" do
+      expect(@player.pre_flop_bets).to_not raise_error
+    end
+    it "post-flop bets" do
+      expect(@player.post_flop_bets).to_not raise_error
+    end
   end
 
 end
