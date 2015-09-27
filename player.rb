@@ -30,4 +30,8 @@ class Player
     TOP_COMBS.map(&:sort).include? my_cards.map{ |card| card['rank'] }.sort
   end
 
+  def our_position(game_state)
+    game_state[:in_action]
+  end
+
 end
