@@ -95,6 +95,10 @@ class Player
     my_cards.map { |card| card.rank }.uniq.size == 1
   end
 
+  def same_suit?
+    my_cards.map { |card| card.suit }.uniq.size == 1
+  end
+
   def our_position
     @game_state[:in_action]
   end
@@ -165,9 +169,25 @@ class Player
 
     if rank >= 2
       suggested_bet
+    elsif flush_dro? || straight_dro?
+      PUTS "FLUSH DRO"
+      suggested_bet
+    elsif has_ace? || i_have_pair?
+      suggested_bet
     else
       DEFAULT_POST_FLOP_BET
     end
+  end
+
+  def flush_dro?
+    suits = my_cards.map(&:suit)
+    suits.map do |suit|
+      cards_on_deck.select{ |card| suits.include? card.suit }.size
+    end.any? { |s| s >= same_suit? ? 2 : 3 }
+  end
+
+  def straight_dro?
+    false
   end
 
 end
