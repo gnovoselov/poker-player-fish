@@ -47,7 +47,7 @@ class Player
   end
 
   def my_cards
-    me["hole_cards"].map { |i| Card.new(i["rank"], i["suit"]) }
+    @me["hole_cards"].map { |i| Card.new(i["rank"], i["suit"]) }
   end
 
   def i_have_pair?
