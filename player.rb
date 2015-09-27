@@ -13,10 +13,10 @@ class Player
     puts game_state.to_s
     @game_state = game_state
     @me = me
-    return ALL_IN_BET if is_top_comb?
-    return ALL_IN_BET if i_have_pair?
-    return ALL_IN_BET if has_ace?
-    DEFAULT_BET
+    return double_max_bet if is_top_comb?
+    return double_max_bet if i_have_pair?
+    return double_max_bet if has_ace?
+    suggested_bet
   rescue StandardError => e
     puts '!!!!!!!!!!!!!!!!!!!!!!!!!!'
     puts e
@@ -46,16 +46,16 @@ class Player
     cards_on_deck + my_cards
   end
 
-  def max_bet_plus_double_blind
-    max_bet + blind * 2
+  def suggested_bet
+    DEFAULT_BET
+  end
+
+  def double_max_bet
+    max_bet * 2
   end
 
   def max_bet
-
-  end
-
-  def blind
-
+    @game_state["players"].max_by { |player| player["bet"] }
   end
 
   def me

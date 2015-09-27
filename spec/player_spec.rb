@@ -19,7 +19,7 @@ describe Player do
       expect(@player.i_have_pair?).to eq false
     end
     it "out position" do
-      expect(@player.our_position(game_state)).to_not raise_error
+      expect(@player.our_position).to_not raise_error
     end
   end
 
