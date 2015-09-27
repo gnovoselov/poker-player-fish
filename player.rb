@@ -36,7 +36,7 @@ class Player
   end
 
   def max_bet
-    @game_state["players"].max_by { |player| player["bet"] }
+    @game_state["players"].max_by{ |player| player["bet"] }["bet"]
   end
 
   def me
