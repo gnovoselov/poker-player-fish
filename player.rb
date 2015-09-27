@@ -61,7 +61,12 @@ class Player
   end
 
   def suggested_bet(blinds = 3)
-    max_bet + @game_state["small_blind"] * blinds - max_bet % @game_state["small_blind"]
+    s_bet = max_bet + @game_state["small_blind"] * blinds - max_bet % @game_state["small_blind"]
+    if s_bet > 400
+      100500
+    else
+      s_bet
+    end
   end
 
   def double_max_bet
