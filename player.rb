@@ -46,6 +46,10 @@ class Player
     flop? || turn? || river?
   end
 
+  def pre_flop?
+    cards_on_deck.size == 0
+  end
+
   def cards_on_deck
     @game_state["community_cards"].map { |c| Card.new(c["rank"], c["suit"]) }
   end
@@ -123,6 +127,8 @@ class Player
 
 
   def need_steal?
+    return false unless preflop?
+    
     active_players_count == 0
     my_id = @me['id']
     steal = [my_id, my_id + 1].include? @game_state['dealer'] && active_players_count == 0
