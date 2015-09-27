@@ -129,7 +129,7 @@ class Player
   def ask_rainman
     return nil unless all_cards.size < 5
     uri = URI.parse("http://rainman.leanpoker.org/rank")
-    JSON.parse(Net::HTTP.post_form(uri, 'cards' => all_cards_json).body)
+    JSON.parse(::Net::HTTP.post_form(uri, 'cards' => all_cards_json).body)
   end
 
   def need_steal?
