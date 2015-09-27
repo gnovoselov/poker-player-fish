@@ -14,7 +14,7 @@ class Card
 
   def int_rank
     @int_rank ||= if @rank.kind_of? String
-      STRING_RANKS[@rank] 
+      STRING_RANKS[@rank]
     else
       @rank.to_i
     end
@@ -25,7 +25,7 @@ class Card
   end
 
   def == (card)
-    card.rank == @rank
+    card.rank == @rank && card.suit == @suit
   end
 
 end

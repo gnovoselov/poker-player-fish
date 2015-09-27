@@ -18,11 +18,11 @@ class Player
     #puts game_state.to_s
     @game_state = game_state
     @me = me
-    @rainman_says = get_cards_rank
-    puts @rainman_says
     if pre_flop?
       pre_flop_bets
     else
+      @rainman_says = get_cards_rank
+      puts @rainman_says
       post_flop_bets
     end
   rescue StandardError => e
@@ -79,27 +79,27 @@ class Player
   end
 
   def my_cards
-    @me["hole_cards"].map { |i| Card.new(i["rank"], i["suit"]) }
+    @my_cards_saved ||= @me["hole_cards"].map { |i| Card.new(i["rank"], i["suit"]) }
   end
 
-  def i_have_pair?
-    same_rank?
+  def i_have_pair?(cards = my_cards)
+    same_rank?(cards)
   end
 
-  def is_top_comb?
-    TOP_COMBS.map(&:sort).include? my_cards.map{ |card| card.rank }.sort
+  def is_top_comb?(cards = my_cards)
+    TOP_COMBS.map(&:sort).include? cards.map{ |card| card.rank }.sort
   end
 
-  def same_rank?
-    my_cards.map { |card| card.rank }.uniq.size == 1
+  def same_rank?(cards = my_cards)
+    cards.map { |card| card.rank }.uniq.size == 1
   end
 
   def our_position
     @game_state[:in_action]
   end
 
-  def has_ace?
-    my_cards.any?{ |card| card.rank == 'A' }
+  def has_ace?(cards = my_cards)
+    cards.any?{ |card| card.rank == 'A' }
   end
 
   def active_players_count
@@ -149,15 +149,44 @@ class Player
     return suggested_bet if i_have_pair?
     return suggested_bet if has_ace?
     return STEAL_BET if need_steal?
-    DEFAULT_BET
+    0
   end
 
   def post_flop_bets
-    return suggested_bet if is_top_comb?
-    return suggested_bet if i_have_pair?
-    return suggested_bet if has_ace?
-    return STEAL_BET if need_steal?
-    DEFAULT_BET
+    cards_used = my_cards
+    if @rainman_says
+      # puts 'rainman'
+      cards_used = @rainman_says["cards_used"].map { |c| Card.new(c["rank"], c["suit"]) }
+      # puts cards_used
+      if @rainman_says["rank"] == 1
+        # puts 'pair'
+        hands = []
+        table = []
+        cards_used.each do |card|
+          if my_cards.include?(card)
+            hands << card
+          else
+            table << card
+          end
+        end
+        # puts cards_used
+        unused_community_cards = @game_state["community_cards"].map{ |c| Card.new(c["rank"], c["suit"]) }.reject{ |c| hands.include?(c) }
+        # puts unused_community_cards
+        if [1, 2].include?(hands.size)
+          if unused_community_cards.select { |c| c.rank > hands[0].rank }.any?
+            return 0
+          else
+            return suggested_bet
+          end
+        else
+          return 0
+        end
+      end
+    end
+    return suggested_bet if is_top_comb?(cards_used)
+    return suggested_bet if i_have_pair?(cards_used)
+    return suggested_bet if has_ace?(cards_used)
+    0
   end
 
 end
