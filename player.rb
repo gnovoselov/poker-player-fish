@@ -15,14 +15,13 @@ class Player
   STEAL_BET = 100
 
   def bet_request(game_state)
-    #puts game_state.to_s
     @game_state = game_state
     @me = me
-    @rainman_says = get_cards_rank
-    puts @rainman_says
     if pre_flop?
       pre_flop_bets
     else
+      @rainman_says = ask_rainman
+      puts @rainman_says
       post_flop_bets
     end
   rescue StandardError => e
@@ -122,6 +121,12 @@ class Player
   end
 
   def get_cards_rank
+    if @rainman_says
+      @rainman_says.fetch "rank"
+    end
+  end
+
+  def ask_rainman
     return nil unless all_cards.size < 5
     uri = URI.parse("http://rainman.leanpoker.org/rank")
     JSON.parse(Net::HTTP.post_form(uri, 'cards' => all_cards_json).body)
