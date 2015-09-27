@@ -1,16 +1,10 @@
 require_relative 'card'
 require 'pry'
-require 'byebug'
 require 'active_support/all'
 require 'cgi'
 require 'json'
-require 'httparty'
 
 class Player
-  include HTTParty
-  base_uri = "http://rainman.leanpoker.org"
-
-
   attr_reader :me, :game_state
 
   ALL_IN_BET = 1000500
@@ -18,16 +12,16 @@ class Player
   VERSION = 'Fish 0.1'
   TOP_COMBS = [['A', 'K'], ['A', 'Q'], ['A', 'J'], ['A', 'T'], ['K', 'Q'], ['K', 'J'], ['K', 'T'], ['Q', 'J']]
   GOOD_SUITS = [['T', '9'], ['J', 'T'], ['Q', 'J'], ['Q', 'T'], ['8', '9']]
+  STEAL_BET = 100
 
   def bet_request(game_state)
     #puts game_state.to_s
     @game_state = game_state
     @me = me
-    get_cards_rank
-    return double_max_bet if is_top_comb?
-    return double_max_bet if i_have_pair?
-    return double_max_bet if has_ace?
-    suggested_bet
+    @rainman_says = get_cards_rank
+    puts @rainman_says
+    return pre_flop_bets if pre_flop?
+    return post_flop_bets if post_flop?
   rescue StandardError => e
     puts '!!!!!!!!!!!!!!!!!!!!!!!!!!'
     puts e
@@ -45,8 +39,16 @@ class Player
     cards_on_deck.size == 4
   end
 
-  def river
+  def river?
     cards_on_deck.size == 5
+  end
+
+  def post_flop?
+    flop? || turn? || river?
+  end
+
+  def pre_flop?
+    cards_on_deck.size == 0
   end
 
   def cards_on_deck
@@ -57,8 +59,8 @@ class Player
     cards_on_deck + my_cards
   end
 
-  def suggested_bet
-    DEFAULT_BET
+  def suggested_bet(blinds = 3)
+    max_bet + @game_state["small_blind"] * blinds - max_bet % @game_state["small_blind"]
   end
 
   def double_max_bet
@@ -119,7 +121,40 @@ class Player
   def get_cards_rank
     return nil unless all_cards.size < 5
     uri = URI.parse("http://rainman.leanpoker.org/rank")
-    @rainman_says = JSON.parse(Net::HTTP.post_form(uri, 'cards' => all_cards_json ).body)
+    JSON.parse(Net::HTTP.post_form(uri, 'cards' => all_cards_json).body)
+  end
+
+  def need_steal?
+    return false unless pre_flop?
+
+    active_players_count == 0
+    my_id = @me['id']
+    steal = [my_id, my_id + 1].include? @game_state['dealer'] && active_players_count == 0
+    if steal
+      puts
+      puts "======================================"
+      puts "STEALING BLIND #{steal}"
+      puts "======================================"
+      puts
+    end
+
+    steal
+  end
+
+  def pre_flop_bets
+    return suggested_bet if is_top_comb?
+    return suggested_bet if i_have_pair?
+    return suggested_bet if has_ace?
+    return STEAL_BET if need_steal?
+    DEFAULT_BET
+  end
+
+  def post_flop_bets
+    return suggested_bet if is_top_comb?
+    return suggested_bet if i_have_pair?
+    return suggested_bet if has_ace?
+    return STEAL_BET if need_steal?
+    DEFAULT_BET
   end
 
 end
