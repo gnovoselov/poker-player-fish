@@ -27,7 +27,7 @@ class Player
   end
 
   def is_top_comb?
-    TOP_COMBS.include? my_cards.map{ |card| card['rank'] }
+    TOP_COMBS.map(&:sort).include? my_cards.map{ |card| card['rank'] }.sort
   end
 
 end
