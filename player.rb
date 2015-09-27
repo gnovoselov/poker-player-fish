@@ -15,6 +15,7 @@ class Player
     @me = me
     return double_max_bet if is_top_comb?
     return double_max_bet if i_have_pair?
+    return double_max_bet if has_ace?
     suggested_bet
   rescue StandardError => e
     puts '!!!!!!!!!!!!!!!!!!!!!!!!!!'
@@ -60,6 +61,10 @@ class Player
 
   def our_position
     @game_state[:in_action]
+  end
+
+  def has_ace?
+    my_cards.any?{ |card| card.rank == 'A' }
   end
 
 end
