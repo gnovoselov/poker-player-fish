@@ -10,7 +10,7 @@ class Player
 
   def bet_request(game_state)
     puts game_state.to_s
-    @me = me(game_state)
+    @me = me
     @game_state = game_state
     return ALL_IN_BET if is_top_comb?
     return ALL_IN_BET if i_have_pair?
@@ -60,7 +60,7 @@ class Player
   end
 
   def our_position
-    game_state[:in_action]
+    @game_state[:in_action]
   end
 
 end
