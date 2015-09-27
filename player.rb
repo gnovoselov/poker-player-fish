@@ -10,6 +10,7 @@ class Player
 
   ALL_IN_BET = 1000500
   DEFAULT_BET = 50
+  DEFAULT_POST_FLOP_BET = 40
   VERSION = 'Fish 0.1'
   TOP_COMBS = [['A', 'K'], ['A', 'Q'], ['A', 'J'], ['A', 'T'], ['K', 'Q'], ['K', 'J'], ['K', 'T'], ['Q', 'J']]
   GOOD_SUITS = [['T', '9'], ['J', 'T'], ['Q', 'J'], ['Q', 'T'], ['8', '9']]
@@ -159,11 +160,14 @@ class Player
   end
 
   def post_flop_bets
-    return suggested_bet if is_top_comb?
-    return suggested_bet if i_have_pair?
-    return suggested_bet if has_ace?
-    return STEAL_BET if need_steal?
-    DEFAULT_BET
+    rank = get_cards_rank
+    puts "POST FLOP RANK #{rank}"
+
+    if rank >= 2
+      suggested_bet
+    else
+      DEFAULT_POST_FLOP_BET
+    end
   end
 
 end
