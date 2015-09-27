@@ -38,8 +38,12 @@ class Player
     cards_on_deck.size == 4
   end
 
-  def river
+  def river?
     cards_on_deck.size == 5
+  end
+
+  def post_flop?
+    flop? || turn? || river?
   end
 
   def cards_on_deck
