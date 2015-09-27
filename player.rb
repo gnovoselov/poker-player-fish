@@ -122,7 +122,14 @@ class Player
     active_players_count == 0
     my_id = @me['id']
     steal = [my_id, my_id + 1].include? @game_state['dealer'] && active_players_count == 0
-    puts "STEALING BLIND #{steal}" if steal
+    if steal
+      puts
+      puts "======================================"
+      puts "STEALING BLIND #{steal}"
+      puts "======================================"
+      puts
+    end
+
     steal
   end
 
