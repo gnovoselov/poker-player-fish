@@ -16,11 +16,11 @@ class Player
     puts game_state.to_s
     @game_state = game_state
     @me = me
-    return double_max_bet if is_top_comb?
-    return double_max_bet if i_have_pair?
-    return double_max_bet if has_ace?
+    return suggested_bet if is_top_comb?
+    return suggested_bet if i_have_pair?
+    return suggested_bet if has_ace?
     return STEAL_BET if need_steal?
-    suggested_bet
+    DEFAULT_BET
   rescue StandardError => e
     puts '!!!!!!!!!!!!!!!!!!!!!!!!!!'
     puts e
