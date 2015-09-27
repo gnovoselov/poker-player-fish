@@ -19,7 +19,7 @@ class Player
   rescue StandardError => e
     puts '!!!!!!!!!!!!!!!!!!!!!!!!!!'
     puts e
-    DEFAULT_BET
+    ALL_IN_BET
   end
 
   def version
