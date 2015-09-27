@@ -86,4 +86,19 @@ class Player
     my_cards.any?{ |card| card.rank == 'A' }
   end
 
+  def active_players_count
+    size=0
+
+    first_player = (@game_state["dealer"]+1)%(@game_state["players"].length)
+    second_player = (@game_state["dealer"]+2)%(@game_state["players"].length)
+
+    @game_state["players"].each do |player|
+      if player["name"]!='Fish' && player["id"]!=first_player && player["id"]!=second_player && player["status"]=='active'
+        size+=1
+      end
+    end
+
+    size
+  end
+
 end
